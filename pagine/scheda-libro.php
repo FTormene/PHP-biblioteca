@@ -65,38 +65,63 @@
         </div>
         <div class="descrizione"> <!-- div che contiene la descrizone del libro -->
             <?php
-                // la descrizione del libro può essere scritta in un file markdown a parte 
-                // oppure direttamente come testo (sempre in formato markdown) nel DB, 
-                // questo if controlla se nel db avevo il nome del file e lho messo 
-                // nella variabile $file_descrizione_md, se è presente allora carico la 
-                // descrizione da quel file, altrimenti la prendo dal campo descrizione_txt del DB
-                if ($file_descrizione_md) {
-                    // carico un testo markdown da file
-                    $myfile = fopen("../schede/ilsignoredeglianelli.md", "r") or die("Unable to open file!");
-                    $testo = fread($myfile,filesize("../schede/ilsignoredeglianelli.md"));
-                    fclose($myfile);
 
-                    // parsedown.php è una libreria, non scritta da me, che permette di convertire 
-                    // un testo scritto in markdown in HTML, così da poterlo mostrare formattato nella pagina, 
-                    // invece di mostrare il testo con i simboli del markdown (es. # per i titoli, * per il grassetto ecc)
-                    include 'parsedown.php';
-                    $Parsedown = new Parsedown();
-                    echo $Parsedown->text($testo);
+                // in questo esempio completo mostro tre modi diversi per scrivere la descrizione di un libro:
 
-                } else {
-                    // questo codice va bene per dividere semplicemente il testo in paragrafi
-                    // va bene se non uso markdown ma solo testo semplice.
-                    // $paragrafi = explode("\n", $descrizione_txt);
-                    // foreach ($paragrafi as $paragrafo) {
-                    //     echo "<p>$paragrafo</p>";
-                    // }
-                    // echo "$descrizione_txt";
+                // 1. testo semplice diviso in paragrafi con dei semplici a capo; l'unica cosa da fare è creare
+                //    i paragrafi con la funzione explode() e poi stamparli con un ciclo foreach.
+                //    Questo è il metodo più semplice che lascio come esempio principale perchè non troppo complicato
+                //    e chiedibile in verifica, ma è un metodo che non permette di avere formattazione del testo 
+                //    (grassetto, elenchi puntati ecc):
 
-                    // versione con markdown, anche se la descrizione è scritta direttamente nel DB
-                    include 'parsedown.php';
-                    $Parsedown = new Parsedown();
-                    echo $Parsedown->text($descrizione_txt);
+                $paragrafi = explode("\n", $descrizione_txt);
+                foreach ($paragrafi as $paragrafo) {
+                    echo "<p>$paragrafo</p>";
                 }
+                // echo "$descrizione_txt"; // solo debugging per confrontare il risultato con il testo grezzo, senza i paragrafi creati con explode() e senza i tag <p>
+                
+
+                // 2. testo scritto in markdown, ma direttamente nel campo descrizione_txt del DB, in questo caso basta
+                //    usare la libreria parsedown.php (non scritta da me ma reperibile online) per convertire il testo 
+                //    markdown in HTML, così da poterlo mostrare formattato nella pagina, invece di mostrare il testo 
+                //    con i simboli del markdown (es. # per i titoli, * per il grassetto ecc):
+                
+                // include 'parsedown.php';
+                // $Parsedown = new Parsedown();
+                // echo $Parsedown->text($descrizione_txt);
+
+
+                // 3. testo scritto in markdown, ma in un file a parte, il cui nome è salvato nel campo file_descrizione_md del DB.
+                //    parsedown.php è una libreria, non scritta da me, che permette di convertire 
+                //    un testo scritto in markdown in HTML, così da poterlo mostrare formattato nella pagina, 
+                //    invece di mostrare il testo con i simboli del markdown (es. # per i titoli, * per il grassetto ecc)
+                
+                // $myfile = fopen("../schede/ilsignoredeglianelli.md", "r") or die("Unable to open file!");
+                // $testo = fread($myfile,filesize("../schede/ilsignoredeglianelli.md"));
+                // fclose($myfile);
+
+                // include 'parsedown.php';
+                // $Parsedown = new Parsedown();
+                // echo $Parsedown->text($testo);
+                
+
+                // nel sito potrei mettere i punti 2 e 3 insieme controllando se nel DB ho il nome del file markdown, 
+                // se ce l'ho allora carico la descrizione da quel file, altrimenti la prendo dal campo descrizione_txt del DB:
+
+                // if ($file_descrizione_md) {
+                //     $myfile = fopen("../schede/ilsignoredeglianelli.md", "r") or die("Unable to open file!");
+                //     $testo = fread($myfile,filesize("../schede/ilsignoredeglianelli.md"));
+                //     fclose($myfile);
+
+                //     include 'parsedown.php';
+                //     $Parsedown = new Parsedown();
+                //     echo $Parsedown->text($testo);
+
+                // } else {
+                //     include 'parsedown.php';
+                //     $Parsedown = new Parsedown();
+                //     echo $Parsedown->text($descrizione_txt);
+                // }
 
             ?>
         </div>

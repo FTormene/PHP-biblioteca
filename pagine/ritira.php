@@ -37,6 +37,8 @@
 	<div class="contenuto">
 		<h1 style="text-align: center; margin-top: 0px">Ricerca e ritiro dei libri</h1>
 		<p>Cerca il libro che vuoi ritirare</p>
+
+        <!-- form per la ricerca dei libri che mi interessa ritirare -->
 		<form method="post" action="">
 			<table id="tab_dati_personali">
 				<tr>
@@ -57,6 +59,7 @@
 
 		<p></p>
 
+        <!-- form con l'elenco dei libri cercati e spuntabili -->
 		<form method="post" action="">
             <?php
                 if (isset($_POST["titolo_libro"]) and isset($_POST["nome_autore"]) and isset($_POST["cognome_autore"])) {

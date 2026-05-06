@@ -39,13 +39,34 @@
                     <td><input type="password" name="password" id="password" required></td>
                 </tr>
             </table>
+            <label for="utente">Utente</label>
+            <input type="radio" name="tipo_utente" id="utente" value="utente" checked>
+
+            <label for="bibliotecario">Bibliotecario</label>
+            <input type="radio" name="tipo_utente" id="bibliotecario" value="bibliotecario">
+            <br><br>
             <input type="submit" value="Accedi">
         </form>
         <?php
             // codice del login
 
             // controllo che la pagina sia stata chiamata col metodo post e siano settati username e password
-            if (/*$_SERVER["REQUEST_METHOD"] == "POST" && */isset($_POST["username"]) && isset($_POST["password"])) {
+            if (/*$_SERVER["REQUEST_METHOD"] == "POST" && */isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["tipo_utente"])  ) {
+                $tipo_utente = $_POST["tipo_utente"];
+                if ($tipo_utente == "utente") {
+                    $tabella = "utenti";
+                } else if ($tipo_utente == "bibliotecario") {
+                    // $tabella = "bibliotecari";   // non esiste ancora la tabella dei bibliotecari, 
+                                                    // quindi per ora non è possibile fare il login come bibliotecario
+                    echo "<p>Per ora la sezione bibliotecari non è disponibile.</p>";
+                    exit();
+                } else {
+                    // non dovrebbe essere possibile arrivare qui perchè i radio button sono esclusivi
+                    // e ho messo checked su uno dei due, ma metto questo controllo ridondante per sicurezza
+                    echo "<p>Seleziona un tipo di utente.</p>";
+                    exit();
+                }
+
                 // salvo i valori di username e password in variabili per comodità
                 $username = $_POST["username"];
                 $password = $_POST["password"];
@@ -55,7 +76,7 @@
 
                 // creazione della query che prende l'utente con quelle credenziali
                 $myquery = "SELECT username, password 
-                            FROM utenti 
+                            FROM $tabella 
                             WHERE username = '$username' AND password = '$password'";
                 
                 // esecuzione della query
